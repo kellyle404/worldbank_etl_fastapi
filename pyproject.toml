@@ -1,0 +1,23 @@
+[project]
+name = "worldbank-etl-fastapi"
+version = "0.1.0"
+description = "This is Kelly's ETL pipeline with API integration for World Bank data, built with FastAPI and SQLAlchemy."
+authors = [
+    {name = "Hngoc Le", email = "hngoc.le.404@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "sqlalchemy (>=2.0.41,<3.0.0)",
+    "pandas (>=2.3.0,<3.0.0)",
+    "loguru (>=0.7.3,<0.8.0)",
+    "pydantic-settings (>=2.10.1,<3.0.0)",
+    "pydantic (>=2.11.7,<3.0.0)",
+    "requests (>=2.32.4,<3.0.0)",
+    "uvicorn (>=0.22.0,<1.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
-from config.config import DATABASE_URL
+from app.core.config import settings
 
 Base = declarative_base()
 
@@ -38,14 +38,3 @@ class IndicatorValue(Base):
     indicator_meta = relationship('IndicatorMeta', back_populates='values')
     country = relationship('Country', back_populates='indicator_values')
     __table_args__ = (UniqueConstraint('indicator_id', 'country_id', 'date', name='uix_indicator_country_date'),)
-
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(bind=engine)
-
-
-
-
-from sqlalchemy import text
-
-session = SessionLocal()
-Base.metadata.create_all(engine)

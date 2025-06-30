@@ -1,5 +1,5 @@
 import requests
-from utils.logger import logger
+from app.utils.logger import logger
 
 def fetch_indicator_metadata():
     indicators = []
@@ -45,7 +45,6 @@ def fetch_all_countries():
         page += 1
     logger.info(f"Fetched {len(countries)} countries")
     return countries
-
 
 def fetch_all_topics():
     url = "http://api.worldbank.org/v2/topic?format=json"

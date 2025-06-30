@@ -1,33 +1,29 @@
-from src.etl.extract import fetch_indicator_metadata, fetch_indicator_values, fetch_all_countries, fetch_all_topics
-from src.etl.transform import transform_topics, transform_indicators_meta, transform_countries, transform_indicator_values
-from src.etl.load import load_dimensions, load_values
-from src.models.models import Base, engine
-from utils.logger import logger
-from config.config import MIN_YEAR, MAX_YEAR
+from app.etl.extract import fetch_indicator_metadata, fetch_indicator_values, fetch_all_countries, fetch_all_topics
+from app.etl.transform import transform_topics, transform_indicators_meta, transform_countries, transform_indicator_values
+from app.etl.load import load_dimensions, load_values
+from app.models.models import Base
+from app.db.db import engine
+from app.core.config import settings
+from app.utils.logger import logger
 
-
-if __name__ == "__main__":
+def main():
+    Base.metadata.create_all(engine)
 
     logger.info("Starting ETL process")
-
+    logger.info("Extracting data...")
     topics_raw = fetch_all_topics()
     indicators_raw = fetch_indicator_metadata()
     countries_raw = fetch_all_countries()
 
-    logger.info(f"Transforming indicators data from {MIN_YEAR} to {MAX_YEAR}.")
-
+    logger.info(f"Data time range: {settings.MIN_YEAR} to {settings.MAX_YEAR}.")
+    logger.info("Transforming data...")
     topics_df = transform_topics(topics_raw)
-    print(topics_df["id"].unique())
-
     indicators_df = transform_indicators_meta(indicators_raw)
-    print(indicators_df["topic_id"].unique())
-    print(indicators_df.head())
-
     countries_df = transform_countries(countries_raw)
+
     indicators_df = indicators_df.sample(n=20, random_state=404).copy()
 
-    Base.metadata.create_all(engine)
-
+    logger.info("Loading data...")
     load_dimensions(topics_df, indicators_df, countries_df)
 
     for code in indicators_df["code"]:
@@ -38,7 +34,6 @@ if __name__ == "__main__":
             continue
 
         values_df = transform_indicator_values(values_raw)
-        print(values_df.head(2))
 
         try:
             load_values(values_df)
@@ -47,3 +42,6 @@ if __name__ == "__main__":
             logger.error(f"Failed to load indicator: {code}. Error: {e}")
 
     logger.info("ETL process completed successfully.")
+
+if __name__ == "__main__":
+    main()

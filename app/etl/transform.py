@@ -1,6 +1,6 @@
 import pandas as pd
-from config.config import MIN_YEAR, MAX_YEAR
-from utils.logger import logger
+from app.core.config import settings
+from app.utils.logger import logger
 
 def transform_topics(topics_raw):
     df = pd.DataFrame([{
@@ -43,10 +43,8 @@ def transform_indicator_values(values_raw):
 
         if d.get("value") is None:
             continue
-
-        if year < MIN_YEAR or year > MAX_YEAR:
+        if year < settings.MIN_YEAR or year > settings.MAX_YEAR:
             continue
-
         rows.append({
             "indicator_code": d["indicator"]["id"],
             "iso3": d["countryiso3code"],
@@ -55,5 +53,4 @@ def transform_indicator_values(values_raw):
         })
 
     df = pd.DataFrame(rows)
-    print(df.head())
     return df
