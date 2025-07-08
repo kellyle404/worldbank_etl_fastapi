@@ -9,7 +9,6 @@ This project builds ETL pipelines to extract, transform, and load World Bank dat
 - Load data into PostgreSQL using SQLAlchemy ORM
 - FastAPI endpoints for data access
 - Logging with Loguru
-- Poetry for dependencies amangement
 
 Date updated: Monday, 30 Jun 2025
 
