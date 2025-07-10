@@ -38,3 +38,12 @@ class IndicatorValue(Base):
     indicator_meta = relationship('IndicatorMeta', back_populates='values')
     country = relationship('Country', back_populates='indicator_values')
     __table_args__ = (UniqueConstraint('indicator_id', 'country_id', 'date', name='uix_indicator_country_date'),)
+
+
+class ETLLog(Base):
+    __tablename__ = "etl_log"
+
+    id = Column(Integer, primary_key=True)
+    level = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    timestamp = Column(String, nullable=False)
